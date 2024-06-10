@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bezpieczne Ferie - Zima 2024</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f0f0f0;
+    }
+    header {
+		margin-top: 100px;
+		margin-left:auto;
+		margin-right:auto;
+      background-color: blue;
+	  height: 100px;
+	  width:500px ;
+      color: #fff;
+      padding: 20px;
+      text-align: center;
+    }
+    section {
+      padding: 20px;
+    }
+    footer {
+		margin-top: 100px;
+		margin-left:auto;
+		margin-right:auto;
+      background-color: blue;
+	  height: 100px;
+	  width:500px ;
+      color: #fff;
+      padding: 10px 0;
+      text-align: center;
+      position: fixed;
+      bottom: 0;
+    }
+    #visits {
+      float: right;
+      margin-right: 20px;
+      color: #fff;
+    }
+    .stars {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -1;
+    }
+    .star {
+      position: absolute;
+      background: transparent;
+      border-radius: 50%;
+      width: 5px;
+      height: 5px;
+      background-color: #00f; /* Niebieski kolor gwiazdek */
+      opacity: 0.8;
+      animation: fall linear infinite;
+    }
+    @keyframes fall {
+      from {
+        transform: translateY(-100%);
+      }
+      to {
+        transform: translateY(100%);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Bezpieczne Ferie - Zima 2024</h1>
+  </header>
+
+  <section>
+    <h2>Podstawowe zasady bezpieczeństwa podczas ferii zimowych:</h2>
+    <ul>
+      <li>Zawsze noś kask podczas sportów zimowych</li>
+      <li>Nie wychodź poza oznaczone trasy na stoku.</li>
+      <li>Miej zawsze telefon komórkowy .</li>
+      <li>Unikaj jazdy po zbyt stromych zboczach.</li>
+      <li>Zachować ostrożność na lodowiskach i unikać ryzykownych sytuacji.</li>
+      <li>Przed wyruszeniem na stok zbierz drużyne :).</li>
+    </ul>
+	 
+  </section>
+
+  <footer>
+    <span id="visits">Odwiedzin: <span id="visitsCount">0</span></span>
+
+  </footer>
+
+  <canvas class="stars"></canvas>
+
+  <script>
+    // Licznik odwiedzin
+    let visitsCount = localStorage.getItem('visitsCount') || 0;
+    visitsCount++;
+    localStorage.setItem('visitsCount', visitsCount);
+    document.getElementById('visitsCount').textContent = visitsCount;
+
+    // Animacja spadających gwiazdek
+    const canvas = document.querySelector('.stars');
+    const ctx = canvas.getContext('2d');
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    function createStar() {
+      return {
+        x: Math.random() * canvas.width,
+        y: -5,
+        radius: Math.random() * 3 + 2, // Zwiększenie wielkości gwiazdek
+        speed: Math.random() * 3 + 1
+      };
+    }
+
+    const stars = Array.from({ length: 100 }, createStar);
+
+    function drawStar(star) {
+      ctx.beginPath();
+      ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+      ctx.fillStyle = '#00f'; // Niebieski kolor gwiazdek
+      ctx.fill();
+    }
+
+    function updateStar(star) {
+      star.y += star.speed;
+      if (star.y > canvas.height) {
+        star.y = -5;
+        star.x = Math.random() * canvas.width;
+      }
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      stars.forEach(star => {
+        drawStar(star);
+        updateStar(star);
+      });
+      requestAnimationFrame(draw);
+    }
+
+    draw();
+  </script>
+</body>
+</html>
